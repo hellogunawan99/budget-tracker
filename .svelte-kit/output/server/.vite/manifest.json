@@ -1,0 +1,437 @@
+{
+  ".svelte-kit/generated/server/internal.js": {
+    "file": "internal.js",
+    "name": "internal",
+    "src": ".svelte-kit/generated/server/internal.js",
+    "isEntry": true,
+    "imports": [
+      "_internal.js",
+      "_environment.js"
+    ]
+  },
+  "_BudgetStatus.js": {
+    "file": "chunks/BudgetStatus.js",
+    "name": "BudgetStatus",
+    "imports": [
+      "_index2.js",
+      "_date.js"
+    ]
+  },
+  "_Button.js": {
+    "file": "chunks/Button.js",
+    "name": "Button",
+    "imports": [
+      "_index2.js"
+    ]
+  },
+  "_Card.js": {
+    "file": "chunks/Card.js",
+    "name": "Card",
+    "imports": [
+      "_index2.js"
+    ]
+  },
+  "_Chart.js": {
+    "file": "chunks/Chart.js",
+    "name": "Chart",
+    "imports": [
+      "_index2.js",
+      "_Icon.js"
+    ]
+  },
+  "_Icon.js": {
+    "file": "chunks/Icon.js",
+    "name": "Icon",
+    "imports": [
+      "_index2.js"
+    ]
+  },
+  "_Select.js": {
+    "file": "chunks/Select.js",
+    "name": "Select",
+    "imports": [
+      "_index2.js",
+      "_Icon.js"
+    ]
+  },
+  "_calendar.js": {
+    "file": "chunks/calendar.js",
+    "name": "calendar",
+    "imports": [
+      "_index2.js",
+      "_Icon.js"
+    ]
+  },
+  "_chart-column.js": {
+    "file": "chunks/chart-column.js",
+    "name": "chart-column",
+    "imports": [
+      "_index2.js",
+      "_Icon.js"
+    ]
+  },
+  "_date.js": {
+    "file": "chunks/date.js",
+    "name": "date"
+  },
+  "_db.js": {
+    "file": "chunks/db.js",
+    "name": "db"
+  },
+  "_environment.js": {
+    "file": "chunks/environment.js",
+    "name": "environment"
+  },
+  "_exports.js": {
+    "file": "chunks/exports.js",
+    "name": "exports"
+  },
+  "_false.js": {
+    "file": "chunks/false.js",
+    "name": "false"
+  },
+  "_index.js": {
+    "file": "chunks/index.js",
+    "name": "index",
+    "imports": [
+      "_index2.js"
+    ]
+  },
+  "_index2.js": {
+    "file": "chunks/index2.js",
+    "name": "index",
+    "imports": [
+      "_false.js"
+    ]
+  },
+  "_internal.js": {
+    "file": "chunks/internal.js",
+    "name": "internal",
+    "imports": [
+      "_index2.js",
+      "_environment.js"
+    ],
+    "dynamicImports": [
+      "src/hooks.server.ts"
+    ]
+  },
+  "_plus.js": {
+    "file": "chunks/plus.js",
+    "name": "plus",
+    "imports": [
+      "_index2.js",
+      "_Icon.js"
+    ]
+  },
+  "_queries.js": {
+    "file": "chunks/queries.js",
+    "name": "queries",
+    "imports": [
+      "_db.js"
+    ]
+  },
+  "_shared.js": {
+    "file": "chunks/shared.js",
+    "name": "shared",
+    "imports": [
+      "_utils.js"
+    ]
+  },
+  "_state.svelte.js": {
+    "file": "chunks/state.svelte.js",
+    "name": "state.svelte",
+    "imports": [
+      "_index2.js"
+    ]
+  },
+  "_trash-2.js": {
+    "file": "chunks/trash-2.js",
+    "name": "trash-2",
+    "imports": [
+      "_index2.js",
+      "_Icon.js"
+    ]
+  },
+  "_trending-up.js": {
+    "file": "chunks/trending-up.js",
+    "name": "trending-up",
+    "imports": [
+      "_index2.js",
+      "_Icon.js"
+    ]
+  },
+  "_utils.js": {
+    "file": "chunks/utils.js",
+    "name": "utils"
+  },
+  "node_modules/@sveltejs/kit/src/runtime/app/server/remote/index.js": {
+    "file": "remote-entry.js",
+    "name": "remote-entry",
+    "src": "node_modules/@sveltejs/kit/src/runtime/app/server/remote/index.js",
+    "isEntry": true,
+    "imports": [
+      "_shared.js",
+      "_false.js",
+      "_environment.js"
+    ]
+  },
+  "node_modules/@sveltejs/kit/src/runtime/components/svelte-5/error.svelte": {
+    "file": "entries/fallbacks/error.svelte.js",
+    "name": "entries/fallbacks/error.svelte",
+    "src": "node_modules/@sveltejs/kit/src/runtime/components/svelte-5/error.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index2.js",
+      "_state.svelte.js",
+      "_exports.js",
+      "_utils.js",
+      "_index.js"
+    ]
+  },
+  "node_modules/@sveltejs/kit/src/runtime/components/svelte-5/layout.svelte": {
+    "file": "entries/fallbacks/layout.svelte.js",
+    "name": "entries/fallbacks/layout.svelte",
+    "src": "node_modules/@sveltejs/kit/src/runtime/components/svelte-5/layout.svelte",
+    "isEntry": true
+  },
+  "node_modules/@sveltejs/kit/src/runtime/server/index.js": {
+    "file": "index.js",
+    "name": "index",
+    "src": "node_modules/@sveltejs/kit/src/runtime/server/index.js",
+    "isEntry": true,
+    "imports": [
+      "_false.js",
+      "_environment.js",
+      "_exports.js",
+      "_utils.js",
+      "_index.js",
+      "_internal.js",
+      "_shared.js"
+    ]
+  },
+  "src/hooks.server.ts": {
+    "file": "chunks/hooks.server.js",
+    "name": "hooks.server",
+    "src": "src/hooks.server.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_db.js"
+    ]
+  },
+  "src/routes/(app)/+layout.svelte": {
+    "file": "entries/pages/(app)/_layout.svelte.js",
+    "name": "entries/pages/(app)/_layout.svelte",
+    "src": "src/routes/(app)/+layout.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index2.js",
+      "_exports.js",
+      "_utils.js",
+      "_state.svelte.js",
+      "_Icon.js",
+      "_trending-up.js",
+      "_chart-column.js"
+    ],
+    "css": [
+      "_app/immutable/assets/_layout.tn0RQdqM.css"
+    ]
+  },
+  "src/routes/(app)/+page.server.ts": {
+    "file": "entries/pages/(app)/_page.server.ts.js",
+    "name": "entries/pages/(app)/_page.server.ts",
+    "src": "src/routes/(app)/+page.server.ts",
+    "isEntry": true,
+    "imports": [
+      "_db.js",
+      "_queries.js",
+      "_date.js"
+    ]
+  },
+  "src/routes/(app)/+page.svelte": {
+    "file": "entries/pages/(app)/_page.svelte.js",
+    "name": "entries/pages/(app)/_page.svelte",
+    "src": "src/routes/(app)/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index2.js",
+      "_date.js",
+      "_Card.js",
+      "_Button.js",
+      "_BudgetStatus.js",
+      "_Chart.js",
+      "_trending-up.js",
+      "_Icon.js",
+      "_calendar.js",
+      "_plus.js"
+    ]
+  },
+  "src/routes/(app)/analytics/+page.server.ts": {
+    "file": "entries/pages/(app)/analytics/_page.server.ts.js",
+    "name": "entries/pages/(app)/analytics/_page.server.ts",
+    "src": "src/routes/(app)/analytics/+page.server.ts",
+    "isEntry": true,
+    "imports": [
+      "_queries.js",
+      "_date.js"
+    ]
+  },
+  "src/routes/(app)/analytics/+page.svelte": {
+    "file": "entries/pages/(app)/analytics/_page.svelte.js",
+    "name": "entries/pages/(app)/analytics/_page.svelte",
+    "src": "src/routes/(app)/analytics/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index2.js",
+      "_date.js",
+      "_Card.js",
+      "_Chart.js",
+      "_chart-column.js",
+      "_trending-up.js",
+      "_Icon.js"
+    ]
+  },
+  "src/routes/(app)/budget/+page.server.ts": {
+    "file": "entries/pages/(app)/budget/_page.server.ts.js",
+    "name": "entries/pages/(app)/budget/_page.server.ts",
+    "src": "src/routes/(app)/budget/+page.server.ts",
+    "isEntry": true,
+    "imports": [
+      "_queries.js",
+      "_date.js"
+    ]
+  },
+  "src/routes/(app)/budget/+page.svelte": {
+    "file": "entries/pages/(app)/budget/_page.svelte.js",
+    "name": "entries/pages/(app)/budget/_page.svelte",
+    "src": "src/routes/(app)/budget/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index2.js",
+      "_exports.js",
+      "_utils.js",
+      "_state.svelte.js",
+      "_date.js",
+      "_Card.js",
+      "_Button.js",
+      "_Select.js",
+      "_BudgetStatus.js",
+      "_plus.js",
+      "_trash-2.js"
+    ]
+  },
+  "src/routes/(app)/expenses/+page.server.ts": {
+    "file": "entries/pages/(app)/expenses/_page.server.ts.js",
+    "name": "entries/pages/(app)/expenses/_page.server.ts",
+    "src": "src/routes/(app)/expenses/+page.server.ts",
+    "isEntry": true,
+    "imports": [
+      "_queries.js",
+      "_date.js"
+    ]
+  },
+  "src/routes/(app)/expenses/+page.svelte": {
+    "file": "entries/pages/(app)/expenses/_page.svelte.js",
+    "name": "entries/pages/(app)/expenses/_page.svelte",
+    "src": "src/routes/(app)/expenses/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index2.js",
+      "_exports.js",
+      "_utils.js",
+      "_state.svelte.js",
+      "_date.js",
+      "_Card.js",
+      "_Button.js",
+      "_Select.js",
+      "_BudgetStatus.js",
+      "_calendar.js",
+      "_Icon.js",
+      "_trash-2.js"
+    ]
+  },
+  "src/routes/(app)/settings/+page.svelte": {
+    "file": "entries/pages/(app)/settings/_page.svelte.js",
+    "name": "entries/pages/(app)/settings/_page.svelte",
+    "src": "src/routes/(app)/settings/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index2.js",
+      "_Card.js",
+      "_Button.js",
+      "_Icon.js",
+      "_trash-2.js"
+    ]
+  },
+  "src/routes/api/actual-expenses/+server.ts": {
+    "file": "entries/endpoints/api/actual-expenses/_server.ts.js",
+    "name": "entries/endpoints/api/actual-expenses/_server.ts",
+    "src": "src/routes/api/actual-expenses/+server.ts",
+    "isEntry": true,
+    "imports": [
+      "_queries.js"
+    ]
+  },
+  "src/routes/api/analytics/trends/+server.ts": {
+    "file": "entries/endpoints/api/analytics/trends/_server.ts.js",
+    "name": "entries/endpoints/api/analytics/trends/_server.ts",
+    "src": "src/routes/api/analytics/trends/+server.ts",
+    "isEntry": true,
+    "imports": [
+      "_queries.js"
+    ]
+  },
+  "src/routes/api/budget/+server.ts": {
+    "file": "entries/endpoints/api/budget/_server.ts.js",
+    "name": "entries/endpoints/api/budget/_server.ts",
+    "src": "src/routes/api/budget/+server.ts",
+    "isEntry": true,
+    "imports": [
+      "_queries.js"
+    ]
+  },
+  "src/routes/api/budget/[id]/summary/+server.ts": {
+    "file": "entries/endpoints/api/budget/_id_/summary/_server.ts.js",
+    "name": "entries/endpoints/api/budget/_id_/summary/_server.ts",
+    "src": "src/routes/api/budget/[id]/summary/+server.ts",
+    "isEntry": true,
+    "imports": [
+      "_queries.js"
+    ]
+  },
+  "src/routes/api/categories/+server.ts": {
+    "file": "entries/endpoints/api/categories/_server.ts.js",
+    "name": "entries/endpoints/api/categories/_server.ts",
+    "src": "src/routes/api/categories/+server.ts",
+    "isEntry": true,
+    "imports": [
+      "_queries.js"
+    ]
+  },
+  "src/routes/api/export/csv/+server.ts": {
+    "file": "entries/endpoints/api/export/csv/_server.ts.js",
+    "name": "entries/endpoints/api/export/csv/_server.ts",
+    "src": "src/routes/api/export/csv/+server.ts",
+    "isEntry": true,
+    "imports": [
+      "_queries.js"
+    ]
+  },
+  "src/routes/api/planned-expenses/+server.ts": {
+    "file": "entries/endpoints/api/planned-expenses/_server.ts.js",
+    "name": "entries/endpoints/api/planned-expenses/_server.ts",
+    "src": "src/routes/api/planned-expenses/+server.ts",
+    "isEntry": true,
+    "imports": [
+      "_queries.js"
+    ]
+  },
+  "src/routes/api/savings-goals/+server.ts": {
+    "file": "entries/endpoints/api/savings-goals/_server.ts.js",
+    "name": "entries/endpoints/api/savings-goals/_server.ts",
+    "src": "src/routes/api/savings-goals/+server.ts",
+    "isEntry": true,
+    "imports": [
+      "_queries.js"
+    ]
+  }
+}

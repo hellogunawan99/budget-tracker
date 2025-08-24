@@ -1,0 +1,43 @@
+{
+	"/(app)": [
+		"src/routes/(app)/+page.server.ts"
+	],
+	"/": [],
+	"/(app)/analytics": [
+		"src/routes/(app)/analytics/+page.server.ts"
+	],
+	"/api/actual-expenses": [
+		"src/routes/api/actual-expenses/+server.ts"
+	],
+	"/api/analytics/trends": [
+		"src/routes/api/analytics/trends/+server.ts"
+	],
+	"/api/budget": [
+		"src/routes/api/budget/+server.ts"
+	],
+	"/api/budget/[id]/summary": [
+		"src/routes/api/budget/[id]/summary/+server.ts"
+	],
+	"/api/categories": [
+		"src/routes/api/categories/+server.ts"
+	],
+	"/api/export/csv": [
+		"src/routes/api/export/csv/+server.ts"
+	],
+	"/api/planned-expenses": [
+		"src/routes/api/planned-expenses/+server.ts"
+	],
+	"/api/savings-goals": [
+		"src/routes/api/savings-goals/+server.ts"
+	],
+	"/(app)/budget": [
+		"src/routes/(app)/budget/+page.server.ts"
+	],
+	"/(app)/expenses": [
+		"src/routes/(app)/expenses/+page.server.ts"
+	],
+	"/(app)/savings-goals": [
+		"src/routes/(app)/savings-goals/+page.server.ts"
+	],
+	"/(app)/settings": []
+}
