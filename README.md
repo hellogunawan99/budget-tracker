@@ -41,11 +41,53 @@ A professional monthly budget tracking web application built with SvelteKit and 
 
 ## Quick Start
 
-### Prerequisites
+### Option 1: Docker (Recommended)
+
+#### Prerequisites
+- Docker
+- Docker Compose
+
+#### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/hellogunawan99/budget-tracker.git
+   cd budget-tracker
+   ```
+
+2. **Run with Docker Compose**
+   ```bash
+   docker-compose up -d
+   ```
+
+3. **Access the application**
+   Navigate to `http://localhost:3000`
+
+#### Docker Commands
+```bash
+# Start the application
+docker-compose up -d
+
+# Stop the application
+docker-compose down
+
+# View logs
+docker-compose logs -f budget-tracker
+
+# Rebuild after code changes
+docker-compose up -d --build
+
+# Remove everything including data
+docker-compose down -v
+```
+
+### Option 2: Local Development
+
+#### Prerequisites
 - Node.js (v16 or higher)
 - npm
 
-### Installation
+#### Installation
 
 1. **Clone or navigate to the project directory**
    ```bash
