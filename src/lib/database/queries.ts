@@ -271,24 +271,27 @@ export class BudgetService {
 		}).reverse();
 	}
 
-	async calculateSavingsGoalRecommendation(goalId: number): Promise<{
-		monthsRemaining: number;
-		amountRemaining: number;
-		monthlyTarget: number;
-		isAchievable: boolean;
-		currentMonthlySavings: number;
-	} | null> {
-		const goal = await this.db.get<SavingsGoal>('SELECT * FROM savings_goals WHERE id = ?', [goalId]);
-		if (!goal || !goal.deadline) return null;
+async calculateSavingsGoalRecommendation(goalId: number): Promise<{
+	monthsRemaining: number;
+	amountRemaining: number;
+	monthlyTarget: number;
+	isAchievable: boolean;
+	currentMonthlySavings: number;
+} | null> {
+	const goal = await this.db.get<SavingsGoal>('SELECT * FROM savings_goals WHERE id = ?', [goalId]);
+	if (!goal || !goal.deadline) return null;
 
-		const now = new Date();
-		const deadline = new Date(goal.deadline);
-		const monthsRemaining = Math.ceil((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24 * 30));
-		
-		if (monthsRemaining <= 0) return null;
+	const now = new Date();
+	const deadline = new Date(goal.deadline);
+	const monthsRemaining = Math.ceil((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24 * 30));
+	
+	if (monthsRemaining <= 0) return null;
 
-		const amountRemaining = goal.target_amount - goal.current_amount;
-		const monthlyTarget = amountRemaining / monthsRemaining;
+	// Calculate current progress based on accumulated savings
+	const totalAccumulated = await this.getTotalAccumulatedSavings(goal.user_id);
+	const currentProgress = Math.min(totalAccumulated, goal.target_amount);
+	const amountRemaining = Math.max(0, goal.target_amount - currentProgress);
+	const monthlyTarget = amountRemaining / monthsRemaining;
 
 		const currentBudget = await this.getCurrentBudget(goal.user_id);
 		let currentMonthlySavings = 0;
