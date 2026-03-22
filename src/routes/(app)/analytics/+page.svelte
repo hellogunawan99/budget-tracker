@@ -1,83 +1,80 @@
 <script lang="ts">
 	import { formatCurrency, getMonthName } from '$lib/utils/date.js';
-	import Card from '$lib/components/Card.svelte';
 	import Chart from '$lib/components/Chart.svelte';
-	import { BarChart3, TrendingUp, TrendingDown, PieChart } from 'lucide-svelte';
+	import { BarChart3, TrendingUp, TrendingDown, PieChart, DollarSign, Target, PiggyBank, ArrowUp, ArrowDown, AlertCircle, CheckCircle, TrendingUp as TrendingUpIcon } from 'lucide-svelte';
 	import type { PageData } from './$types.js';
 
 	export let data: PageData;
 
-	$: categoryChartData = data.categoryBreakdown?.length > 0 ? {
-		labels: data.categoryBreakdown.map(item => item.category_name),
+	$: categoryChartData = (data.categoryBreakdown || []).length > 0 ? {
+		labels: (data.categoryBreakdown || []).map(item => item.category_name),
 		datasets: [{
-			label: 'Actual Spending',
-			data: data.categoryBreakdown.map(item => item.actual),
-			backgroundColor: data.categoryBreakdown.map(item => item.category_color),
-			borderWidth: 2,
-			borderColor: '#ffffff'
+			data: (data.categoryBreakdown || []).map(item => item.actual),
+			backgroundColor: (data.categoryBreakdown || []).map(item => item.category_color),
+			borderWidth: 0,
+			hoverOffset: 4
 		}]
 	} : null;
 
-	$: comparisonChartData = data.categoryBreakdown?.length > 0 ? {
-		labels: data.categoryBreakdown.map(item => item.category_name),
+	$: comparisonChartData = (data.categoryBreakdown || []).length > 0 ? {
+		labels: (data.categoryBreakdown || []).map(item => item.category_name),
 		datasets: [
 			{
 				label: 'Planned',
-				data: data.categoryBreakdown.map(item => item.planned),
-				backgroundColor: 'rgba(59, 130, 246, 0.8)',
-				borderColor: 'rgb(59, 130, 246)',
-				borderWidth: 1
+				data: (data.categoryBreakdown || []).map(item => item.planned),
+				backgroundColor: 'rgba(31, 41, 55, 0.8)',
+				borderRadius: 6
 			},
 			{
 				label: 'Actual',
-				data: data.categoryBreakdown.map(item => item.actual),
-				backgroundColor: 'rgba(16, 185, 129, 0.8)',
-				borderColor: 'rgb(16, 185, 129)',
-				borderWidth: 1
+				data: (data.categoryBreakdown || []).map(item => item.actual),
+				backgroundColor: 'rgba(107, 114, 128, 0.8)',
+				borderRadius: 6
 			}
 		]
 	} : null;
 
-	$: trendsChartData = data.trends?.length > 0 ? {
-		labels: data.trends.map(item => `${getMonthName(item.month)} ${item.year}`),
+	$: trendsChartData = (data.trends || []).length > 0 ? {
+		labels: (data.trends || []).map(item => `${getMonthName(Number(item.month))}`),
 		datasets: [
 			{
 				label: 'Income',
-				data: data.trends.map(item => item.income),
-				borderColor: 'rgb(34, 197, 94)',
-				backgroundColor: 'rgba(34, 197, 94, 0.1)',
+				data: (data.trends || []).map(item => item.income),
+				borderColor: '#1f2937',
+				backgroundColor: 'rgba(31, 41, 55, 0.1)',
 				fill: true,
 				tension: 0.4
 			},
 			{
 				label: 'Expenses',
-				data: data.trends.map(item => item.expenses),
-				borderColor: 'rgb(239, 68, 68)',
-				backgroundColor: 'rgba(239, 68, 68, 0.1)',
+				data: (data.trends || []).map(item => item.expenses),
+				borderColor: '#6b7280',
+				backgroundColor: 'rgba(107, 114, 128, 0.1)',
 				fill: true,
 				tension: 0.4
 			},
 			{
 				label: 'Savings',
-				data: data.trends.map(item => item.savings),
-				borderColor: 'rgb(59, 130, 246)',
-				backgroundColor: 'rgba(59, 130, 246, 0.1)',
+				data: (data.trends || []).map(item => item.savings),
+				borderColor: '#059669',
+				backgroundColor: 'rgba(5, 150, 105, 0.1)',
 				fill: true,
 				tension: 0.4
 			}
 		]
 	} : null;
 
-	$: averageSpending = data.trends?.length > 0 
-		? data.trends.reduce((sum, trend) => sum + trend.expenses, 0) / data.trends.length 
+	$: averageSpending = data.trends && data.trends.length > 0
+		? data.trends.reduce((sum, trend) => sum + trend.expenses, 0) / data.trends.length
 		: 0;
 
-	$: averageSavings = data.trends?.length > 0 
-		? data.trends.reduce((sum, trend) => sum + trend.savings, 0) / data.trends.length 
+	$: averageSavings = data.trends && data.trends.length > 0
+		? data.trends.reduce((sum, trend) => sum + trend.savings, 0) / data.trends.length
 		: 0;
 
 	$: currentMonthSpending = data.budgetSummary?.totalActual || 0;
 	$: currentMonthSavings = data.budgetSummary ? data.budgetSummary.salary - data.budgetSummary.totalActual : 0;
+	$: budgetUsedPercent = data.budgetSummary ? (data.budgetSummary.totalActual / data.budgetSummary.salary) * 100 : 0;
 
 	$: spendingTrend = currentMonthSpending > averageSpending ? 'up' : 'down';
 	$: savingsTrend = currentMonthSavings > averageSavings ? 'up' : 'down';
@@ -85,133 +82,181 @@
 	$: topSpendingCategories = data.categoryBreakdown
 		?.filter(item => item.actual > 0)
 		.sort((a, b) => b.actual - a.actual)
-		.slice(0, 3) || [];
+		.slice(0, 5) || [];
 </script>
 
 <svelte:head>
 	<title>Analytics - Budget Tracker</title>
 </svelte:head>
 
-<div class="space-y-6">
-	<div>
-		<h1 class="text-2xl font-bold text-gray-900">Analytics & Insights</h1>
-		<p class="text-gray-500 mt-1">Analyze your spending patterns and financial trends</p>
+<div class="analytics-page">
+	<!-- Header -->
+	<div class="page-header">
+		<div class="header-content">
+			<div class="header-icon">
+				<BarChart3 />
+			</div>
+			<div>
+				<h1>Analytics & Insights</h1>
+				<p>Analyze your spending patterns and financial trends</p>
+			</div>
+		</div>
 	</div>
 
 	{#if data.error}
-		<Card title="Error">
-			<p class="text-danger-600">{data.error}</p>
-		</Card>
+		<div class="error-banner">
+			<div class="error-icon">
+				<AlertCircle />
+			</div>
+			<div>
+				<h3>Unable to Load Analytics</h3>
+				<p>{data.error}</p>
+			</div>
+		</div>
 	{:else}
-		<!-- Key Metrics -->
-		<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-			<Card>
-				<div class="flex items-center">
-					<div class="flex-shrink-0">
-						<div class="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center">
-							<BarChart3 class="w-5 h-5 text-primary-600" />
-						</div>
-					</div>
-					<div class="ml-4">
-						<p class="text-sm font-medium text-gray-500">This Month</p>
-						<p class="text-2xl font-bold text-gray-900">{formatCurrency(currentMonthSpending)}</p>
-						<p class="text-xs flex items-center {spendingTrend === 'up' ? 'text-danger-600' : 'text-success-600'}">
-							<svelte:component 
-								this={spendingTrend === 'up' ? TrendingUp : TrendingDown} 
-								class="w-3 h-3 mr-1" 
-							/>
-							vs {formatCurrency(averageSpending)} avg
-						</p>
+		<!-- Stats Grid -->
+		<div class="stats-grid">
+			<div class="stat-card">
+				<div class="stat-icon spent">
+					<DollarSign />
+				</div>
+				<div class="stat-content">
+					<span class="stat-label">This Month Spending</span>
+					<span class="stat-value">{formatCurrency(currentMonthSpending)}</span>
+					<div class="stat-trend" class:up={spendingTrend === 'up'} class:down={spendingTrend === 'down'}>
+						{#if spendingTrend === 'up'}
+							<ArrowUp class="w-3 h-3" />
+							<span>+{formatCurrency(Math.abs(currentMonthSpending - averageSpending))} vs avg</span>
+						{:else}
+							<ArrowDown class="w-3 h-3" />
+							<span>{formatCurrency(Math.abs(currentMonthSpending - averageSpending))} below avg</span>
+						{/if}
 					</div>
 				</div>
-			</Card>
+			</div>
 
-			<Card>
-				<div class="flex items-center">
-					<div class="flex-shrink-0">
-						<div class="w-8 h-8 bg-success-100 rounded-lg flex items-center justify-center">
-							<TrendingUp class="w-5 h-5 text-success-600" />
-						</div>
-					</div>
-					<div class="ml-4">
-						<p class="text-sm font-medium text-gray-500">This Month Savings</p>
-						<p class="text-2xl font-bold text-gray-900">{formatCurrency(currentMonthSavings)}</p>
-						<p class="text-xs flex items-center {savingsTrend === 'up' ? 'text-success-600' : 'text-danger-600'}">
-							<svelte:component 
-								this={savingsTrend === 'up' ? TrendingUp : TrendingDown} 
-								class="w-3 h-3 mr-1" 
-							/>
-							vs {formatCurrency(averageSavings)} avg
-						</p>
+			<div class="stat-card">
+				<div class="stat-icon savings">
+					<PiggyBank />
+				</div>
+				<div class="stat-content">
+					<span class="stat-label">This Month Savings</span>
+					<span class="stat-value success">{formatCurrency(currentMonthSavings)}</span>
+					<div class="stat-trend" class:up={savingsTrend === 'up'} class:down={savingsTrend === 'down'}>
+						{#if savingsTrend === 'up'}
+							<ArrowUp class="w-3 h-3" />
+							<span>+{formatCurrency(Math.abs(currentMonthSavings - averageSavings))} vs avg</span>
+						{:else}
+							<ArrowDown class="w-3 h-3" />
+							<span>{formatCurrency(Math.abs(currentMonthSavings - averageSavings))} below avg</span>
+						{/if}
 					</div>
 				</div>
-			</Card>
+			</div>
 
-			<Card>
-				<div class="flex items-center">
-					<div class="flex-shrink-0">
-						<div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-							<svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-							</svg>
-						</div>
-					</div>
-					<div class="ml-4">
-						<p class="text-sm font-medium text-gray-500">Total Accumulated</p>
-						<p class="text-2xl font-bold text-gray-900">{formatCurrency(data.totalAccumulatedSavings || 0)}</p>
-						<p class="text-xs text-gray-500">All-time savings</p>
-					</div>
+			<div class="stat-card">
+				<div class="stat-icon total">
+					<Target />
 				</div>
-			</Card>
+				<div class="stat-content">
+					<span class="stat-label">Total Accumulated</span>
+					<span class="stat-value">{formatCurrency(data.totalAccumulatedSavings || 0)}</span>
+					<span class="stat-sub">All-time savings</span>
+				</div>
+			</div>
 
-			<Card>
-				<div class="flex items-center">
-					<div class="flex-shrink-0">
-						<div class="w-8 h-8 bg-warning-100 rounded-lg flex items-center justify-center">
-							<PieChart class="w-5 h-5 text-warning-600" />
-						</div>
-					</div>
-					<div class="ml-4">
-						<p class="text-sm font-medium text-gray-500">Categories</p>
-						<p class="text-2xl font-bold text-gray-900">{data.categoryBreakdown?.length || 0}</p>
-						<p class="text-xs text-gray-500">with spending</p>
-					</div>
+			<div class="stat-card">
+				<div class="stat-icon budget">
+					<PieChart />
 				</div>
-			</Card>
-
-			<Card>
-				<div class="flex items-center">
-					<div class="flex-shrink-0">
-						<div class="w-8 h-8 bg-danger-100 rounded-lg flex items-center justify-center">
-							<TrendingDown class="w-5 h-5 text-danger-600" />
-						</div>
-					</div>
-					<div class="ml-4">
-						<p class="text-sm font-medium text-gray-500">Budget Used</p>
-						<p class="text-2xl font-bold text-gray-900">
-							{data.budgetSummary ? Math.round((data.budgetSummary.totalActual / data.budgetSummary.salary) * 100) : 0}%
-						</p>
-						<p class="text-xs text-gray-500">of monthly budget</p>
-					</div>
+				<div class="stat-content">
+					<span class="stat-label">Budget Used</span>
+					<span class="stat-value" class:over={budgetUsedPercent > 90} class:warning={budgetUsedPercent > 75 && budgetUsedPercent <= 90}>
+						{budgetUsedPercent.toFixed(0)}%
+					</span>
+					<span class="stat-sub">of monthly budget</span>
 				</div>
-			</Card>
+			</div>
 		</div>
 
-		<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-			<!-- Spending by Category (Doughnut) -->
+		<!-- Charts Row -->
+		<div class="charts-grid">
+			<!-- Spending Distribution -->
 			{#if categoryChartData}
-				<Card title="Spending Distribution" subtitle="Current month breakdown">
-					<Chart type="doughnut" data={categoryChartData} height={300} />
-				</Card>
+				<div class="chart-card">
+					<div class="chart-header">
+						<h2>Spending Distribution</h2>
+						<p>Where your money goes this month</p>
+					</div>
+					<div class="chart-container">
+						<Chart type="doughnut" data={categoryChartData} height={280} />
+					</div>
+					<div class="category-list">
+						{#each (data.categoryBreakdown || []).slice(0, 5) as cat}
+							<div class="category-item">
+								<div class="category-color" style="background-color: {cat.category_color}"></div>
+								<span class="category-name">{cat.category_name}</span>
+								<span class="category-value">{formatCurrency(cat.actual)}</span>
+							</div>
+						{/each}
+					</div>
+				</div>
 			{/if}
 
-			<!-- Plan vs Actual Comparison -->
+			<!-- Budget vs Actual -->
 			{#if comparisonChartData}
-				<Card title="Budget vs Actual" subtitle="Planned vs actual spending by category">
-					<Chart 
-						type="bar" 
-						data={comparisonChartData} 
-						height={300}
+				<div class="chart-card">
+					<div class="chart-header">
+						<h2>Budget vs Actual</h2>
+						<p>Planned vs real spending by category</p>
+					</div>
+					<div class="chart-container">
+						<Chart
+							type="bar"
+							data={comparisonChartData}
+							height={280}
+							options={{
+								responsive: true,
+								plugins: {
+									legend: {
+										position: 'top'
+									}
+								},
+								scales: {
+									x: {
+										beginAtZero: true,
+										grid: {
+											display: false
+										}
+									},
+									y: {
+										beginAtZero: true,
+										ticks: {
+											callback: function(value: number) {
+												return '$' + value.toLocaleString();
+											}
+										}
+									}
+								}
+							}}
+						/>
+					</div>
+				</div>
+			{/if}
+		</div>
+
+		<!-- Monthly Trends -->
+		{#if trendsChartData}
+			<div class="trends-card">
+				<div class="chart-header">
+					<h2>Monthly Trends</h2>
+					<p>Income, expenses, and savings over time</p>
+				</div>
+				<div class="trends-chart">
+					<Chart
+						type="line"
+						data={trendsChartData}
+						height={320}
 						options={{
 							responsive: true,
 							plugins: {
@@ -221,7 +266,10 @@
 							},
 							scales: {
 								x: {
-									beginAtZero: true
+									beginAtZero: true,
+									grid: {
+										display: false
+									}
 								},
 								y: {
 									beginAtZero: true,
@@ -234,154 +282,638 @@
 							}
 						}}
 					/>
-				</Card>
-			{/if}
-		</div>
-
-		<!-- Monthly Trends -->
-		{#if trendsChartData}
-			<Card title="Monthly Trends" subtitle="Income, expenses, and savings over time">
-				<Chart 
-					type="line" 
-					data={trendsChartData} 
-					height={350}
-					options={{
-						responsive: true,
-						plugins: {
-							legend: {
-								position: 'top'
-							}
-						},
-						scales: {
-							x: {
-								beginAtZero: true
-							},
-							y: {
-								beginAtZero: true,
-								ticks: {
-									callback: function(value: number) {
-										return '$' + value.toLocaleString();
-									}
-								}
-							}
-						}
-					}}
-				/>
-			</Card>
+				</div>
+			</div>
 		{/if}
 
-		<!-- Top Spending Categories -->
-		{#if topSpendingCategories.length > 0}
-			<Card title="Top Spending Categories" subtitle="Your biggest expense categories this month">
-				<div class="space-y-4">
-					{#each topSpendingCategories as category, index}
-						<div class="flex items-center justify-between">
-							<div class="flex items-center space-x-3">
-								<div class="text-lg font-bold text-gray-400">#{index + 1}</div>
-								<div 
-									class="w-4 h-4 rounded-full"
-									style="background-color: {category.category_color}"
-								></div>
-								<div>
-									<p class="font-medium text-gray-900">{category.category_name}</p>
-									<p class="text-sm text-gray-500">
-										{((category.actual / currentMonthSpending) * 100).toFixed(1)}% of total spending
-									</p>
+		<!-- Top Categories & Insights -->
+		<div class="bottom-grid">
+			<!-- Top Spending Categories -->
+			{#if topSpendingCategories.length > 0}
+				<div class="categories-card">
+					<div class="chart-header">
+						<h2>Top Spending Categories</h2>
+						<p>Your biggest expenses this month</p>
+					</div>
+					<div class="categories-list">
+						{#each topSpendingCategories as category, index}
+							{@const percent = (category.actual / currentMonthSpending) * 100}
+							{@const diff = category.actual - category.planned}
+							<div class="category-row">
+								<div class="rank">#{index + 1}</div>
+								<div class="cat-info">
+									<div class="cat-color" style="background-color: {category.category_color}"></div>
+									<div>
+										<span class="cat-name">{category.category_name}</span>
+										<span class="cat-percent">{percent.toFixed(1)}% of total</span>
+									</div>
 								</div>
-							</div>
-							<div class="text-right">
-								<p class="font-bold text-gray-900">{formatCurrency(category.actual)}</p>
-								{#if category.planned > 0}
-									<p class="text-xs {category.actual > category.planned ? 'text-danger-600' : 'text-success-600'}">
-										{category.actual > category.planned ? 'Over' : 'Under'} budget by {formatCurrency(Math.abs(category.actual - category.planned))}
-									</p>
-								{/if}
-							</div>
-						</div>
-					{/each}
-				</div>
-			</Card>
-		{/if}
-
-		<!-- Insights -->
-		<Card title="Insights & Recommendations">
-			<div class="space-y-4">
-				{#if data.budgetSummary}
-					{#if data.budgetSummary.remainingBudget < 0}
-						<div class="p-4 bg-danger-50 border border-danger-200 rounded-lg">
-							<p class="text-danger-800 font-medium">⚠️ You're over budget by {formatCurrency(Math.abs(data.budgetSummary.remainingBudget))}</p>
-							<p class="text-danger-700 text-sm mt-1">Consider reducing spending in your top categories or adjusting your budget.</p>
-						</div>
-					{:else if data.budgetSummary.remainingBudget < data.budgetSummary.salary * 0.1}
-						<div class="p-4 bg-warning-50 border border-warning-200 rounded-lg">
-							<p class="text-warning-800 font-medium">💡 You're close to your budget limit</p>
-							<p class="text-warning-700 text-sm mt-1">You have {formatCurrency(data.budgetSummary.remainingBudget)} remaining. Consider tracking expenses more carefully.</p>
-						</div>
-					{:else}
-						<div class="p-4 bg-success-50 border border-success-200 rounded-lg">
-							<p class="text-success-800 font-medium">✅ You're doing well with your budget!</p>
-							<p class="text-success-700 text-sm mt-1">You have {formatCurrency(data.budgetSummary.remainingBudget)} remaining this month.</p>
-						</div>
-					{/if}
-				{/if}
-
-				{#if currentMonthSpending > averageSpending && averageSpending > 0}
-					<div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-						<p class="text-blue-800 font-medium">📈 Higher spending this month</p>
-						<p class="text-blue-700 text-sm mt-1">You're spending {formatCurrency(currentMonthSpending - averageSpending)} more than your 6-month average.</p>
-					</div>
-				{/if}
-
-				{#if topSpendingCategories.length > 0 && topSpendingCategories[0].actual > currentMonthSpending * 0.4}
-					<div class="p-4 bg-purple-50 border border-purple-200 rounded-lg">
-						<p class="text-purple-800 font-medium">🎯 Consider diversifying expenses</p>
-						<p class="text-purple-700 text-sm mt-1">{topSpendingCategories[0].category_name} represents {((topSpendingCategories[0].actual / currentMonthSpending) * 100).toFixed(1)}% of your spending. Consider if this balance is right for your goals.</p>
-					</div>
-				{/if}
-
-				<div class="p-4 bg-green-50 border border-green-200 rounded-lg">
-					<p class="text-green-800 font-medium">💰 Your Accumulated Savings</p>
-					<div class="text-green-700 text-sm mt-1">
-						<p>You have <strong>{formatCurrency(data.totalAccumulatedSavings || 0)}</strong> in total accumulated savings from all your budget surpluses.</p>
-						<p class="text-xs mt-1">This represents all the money you've saved by staying under budget across all months. You can use this for your savings goals!</p>
-					</div>
-				</div>
-
-				{#if data.savingsGoals && data.savingsGoals.length > 0}
-					{#each data.savingsGoals.filter(goal => goal.recommendation) as goal}
-						{#if goal.recommendation}
-							<div class="p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
-								<p class="text-indigo-800 font-medium">💰 Savings Goal: {goal.title}</p>
-								<div class="text-indigo-700 text-sm mt-1 space-y-1">
-									<p>Target: {formatCurrency(goal.target_amount)} by {new Date(goal.deadline).toLocaleDateString()}</p>
-									<p>Progress: {formatCurrency(goal.actualProgress || 0)} / {formatCurrency(goal.target_amount)} ({(goal.progressPercentage || 0).toFixed(1)}%)</p>
-									<p>
-										{#if goal.recommendation.monthsRemaining > 0}
-											<strong>
-												{#if goal.recommendation.isAchievable}
-													✅ You need to save {formatCurrency(goal.recommendation.monthlyTarget)} monthly to reach this goal
-												{:else}
-													⚠️ You need to save {formatCurrency(goal.recommendation.monthlyTarget)} monthly, but your current monthly savings is only {formatCurrency(goal.recommendation.currentMonthlySavings)}
-												{/if}
-											</strong>
-											{#if !goal.recommendation.isAchievable}
-												<br><span class="text-xs">Consider extending the deadline or reducing other expenses by {formatCurrency(goal.recommendation.monthlyTarget - goal.recommendation.currentMonthlySavings)} monthly</span>
-											{/if}
-										{:else}
-											<strong class="text-red-600">⚠️ This goal's deadline has passed or is due this month</strong>
-										{/if}
-									</p>
-									{#if goal.progressPercentage >= 100}
-										<p class="text-xs border-t pt-2 mt-2 text-green-600 font-medium">
-											🎉 <strong>Goal achieved!</strong> Your accumulated savings cover this target.
-										</p>
+								<div class="cat-values">
+									<span class="cat-amount">{formatCurrency(category.actual)}</span>
+									{#if category.planned > 0}
+										<span class="cat-diff" class:over={diff > 0} class:under={diff <= 0}>
+											{diff > 0 ? '+' : ''}{formatCurrency(diff)} vs plan
+										</span>
 									{/if}
 								</div>
 							</div>
+							<div class="cat-bar-track">
+								<div
+									class="cat-bar-fill"
+									style="width: {percent}%; background-color: {category.category_color}"
+								></div>
+							</div>
+						{/each}
+					</div>
+				</div>
+			{/if}
+
+			<!-- Insights -->
+			<div class="insights-card">
+				<div class="chart-header">
+					<h2>Insights & Recommendations</h2>
+				</div>
+				<div class="insights-list">
+					{#if data.budgetSummary}
+						{#if data.budgetSummary.remainingBudget < 0}
+							<div class="insight-item danger">
+								<div class="insight-icon">
+									<AlertCircle />
+								</div>
+								<div class="insight-content">
+									<h4>Over Budget</h4>
+									<p>You're {formatCurrency(Math.abs(data.budgetSummary.remainingBudget))} over budget. Consider reducing spending in top categories.</p>
+								</div>
+							</div>
+						{:else if data.budgetSummary.remainingBudget < data.budgetSummary.salary * 0.1}
+							<div class="insight-item warning">
+								<div class="insight-icon">
+									<AlertCircle />
+								</div>
+								<div class="insight-content">
+									<h4>Budget Alert</h4>
+									<p>Only {formatCurrency(data.budgetSummary.remainingBudget)} left. Track expenses carefully.</p>
+								</div>
+							</div>
+						{:else}
+							<div class="insight-item success">
+								<div class="insight-icon">
+									<CheckCircle />
+								</div>
+								<div class="insight-content">
+									<h4>On Track</h4>
+									<p>You have {formatCurrency(data.budgetSummary.remainingBudget)} remaining. Great job!</p>
+								</div>
+							</div>
 						{/if}
-					{/each}
-				{/if}
+					{/if}
+
+					{#if currentMonthSpending > averageSpending && averageSpending > 0}
+						<div class="insight-item info">
+							<div class="insight-icon">
+								<TrendingUpIcon />
+							</div>
+							<div class="insight-content">
+								<h4>Spending Spike</h4>
+								<p>+{formatCurrency(currentMonthSpending - averageSpending)} vs your 6-month average.</p>
+							</div>
+						</div>
+					{/if}
+
+					{#if topSpendingCategories.length > 0 && topSpendingCategories[0].actual > currentMonthSpending * 0.4}
+						<div class="insight-item info">
+							<div class="insight-icon">
+								<Target />
+							</div>
+							<div class="insight-content">
+								<h4>High Concentration</h4>
+								<p>{topSpendingCategories[0].category_name} is {((topSpendingCategories[0].actual / currentMonthSpending) * 100).toFixed(1)}% of spending. Consider diversifying.</p>
+							</div>
+						</div>
+					{/if}
+
+					<div class="insight-item savings">
+						<div class="insight-icon">
+							<PiggyBank />
+						</div>
+						<div class="insight-content">
+							<h4>Accumulated Savings</h4>
+							<p>You have <strong>{formatCurrency(data.totalAccumulatedSavings || 0)}</strong> total saved across all months. Use it for your savings goals!</p>
+						</div>
+					</div>
+				</div>
 			</div>
-		</Card>
+		</div>
 	{/if}
 </div>
+
+<style>
+	.analytics-page {
+		padding: 1.5rem;
+		max-width: 1400px;
+		margin: 0 auto;
+	}
+
+	/* Header */
+	.page-header {
+		margin-bottom: 2rem;
+	}
+
+	.header-content {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.header-icon {
+		width: 56px;
+		height: 56px;
+		background: #1f2937;
+		border-radius: 1rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: white;
+	}
+
+	.header-icon :global(svg) {
+		width: 28px;
+		height: 28px;
+	}
+
+	.header-content h1 {
+		font-size: 1.5rem;
+		font-weight: 700;
+		color: #1f2937;
+		margin: 0;
+	}
+
+	.header-content p {
+		font-size: 0.875rem;
+		color: #6b7280;
+		margin: 0.25rem 0 0 0;
+	}
+
+	/* Error Banner */
+	.error-banner {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 1.25rem;
+		background: #fef2f2;
+		border: 1px solid #fecaca;
+		border-radius: 1rem;
+	}
+
+	.error-icon {
+		width: 48px;
+		height: 48px;
+		background: #fee2e2;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #dc2626;
+	}
+
+	.error-banner h3 {
+		font-size: 1rem;
+		font-weight: 600;
+		color: #991b1b;
+		margin: 0;
+	}
+
+	.error-banner p {
+		font-size: 0.875rem;
+		color: #dc2626;
+		margin: 0.25rem 0 0 0;
+	}
+
+	/* Stats Grid */
+	.stats-grid {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 1rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.stat-card {
+		background: white;
+		border-radius: 1rem;
+		padding: 1.25rem;
+		border: 1px solid #e5e7eb;
+		display: flex;
+		gap: 1rem;
+		transition: all 0.2s;
+	}
+
+	.stat-card:hover {
+		border-color: #d1d5db;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+	}
+
+	.stat-icon {
+		width: 48px;
+		height: 48px;
+		border-radius: 0.75rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		background: #f3f4f6;
+		color: #1f2937;
+	}
+
+	.stat-icon :global(svg) {
+		width: 24px;
+		height: 24px;
+	}
+
+	.stat-icon.spent {
+		background: #f3f4f6;
+		color: #1f2937;
+	}
+
+	.stat-icon.savings {
+		background: #f3f4f6;
+		color: #1f2937;
+	}
+
+	.stat-icon.total {
+		background: #f3f4f6;
+		color: #1f2937;
+	}
+
+	.stat-icon.budget {
+		background: #f3f4f6;
+		color: #1f2937;
+	}
+
+	.stat-content {
+		display: flex;
+		flex-direction: column;
+		gap: 0.125rem;
+	}
+
+	.stat-label {
+		font-size: 0.75rem;
+		font-weight: 500;
+		color: #6b7280;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.stat-value {
+		font-size: 1.375rem;
+		font-weight: 700;
+		color: #1f2937;
+	}
+
+	.stat-value.success {
+		color: #059669;
+	}
+
+	.stat-value.over {
+		color: #dc2626;
+	}
+
+	.stat-value.warning {
+		color: #d97706;
+	}
+
+	.stat-trend {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		font-size: 0.6875rem;
+		font-weight: 500;
+	}
+
+	.stat-trend.up {
+		color: #dc2626;
+	}
+
+	.stat-trend.down {
+		color: #059669;
+	}
+
+	.stat-sub {
+		font-size: 0.6875rem;
+		color: #9ca3af;
+	}
+
+	/* Charts Grid */
+	.charts-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1.5rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.chart-card,
+	.trends-card,
+	.categories-card,
+	.insights-card {
+		background: white;
+		border-radius: 1rem;
+		padding: 1.5rem;
+		border: 1px solid #e5e7eb;
+	}
+
+	.chart-header {
+		margin-bottom: 1.25rem;
+	}
+
+	.chart-header h2 {
+		font-size: 1.0625rem;
+		font-weight: 600;
+		color: #1f2937;
+		margin: 0;
+	}
+
+	.chart-header p {
+		font-size: 0.8125rem;
+		color: #6b7280;
+		margin: 0.25rem 0 0 0;
+	}
+
+	.chart-container {
+		display: flex;
+		justify-content: center;
+	}
+
+	/* Category List */
+	.category-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		margin-top: 1rem;
+	}
+
+	.category-item {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.category-color {
+		width: 12px;
+		height: 12px;
+		border-radius: 4px;
+		flex-shrink: 0;
+	}
+
+	.category-name {
+		flex: 1;
+		font-size: 0.875rem;
+		color: #374151;
+	}
+
+	.category-value {
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: #1f2937;
+	}
+
+	/* Trends Card */
+	.trends-card {
+		margin-bottom: 1.5rem;
+	}
+
+	.trends-chart {
+		margin-top: 1rem;
+	}
+
+	/* Bottom Grid */
+	.bottom-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1.5rem;
+	}
+
+	/* Categories Card */
+	.categories-list {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.category-row {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.rank {
+		font-size: 0.75rem;
+		font-weight: 700;
+		color: #9ca3af;
+		width: 24px;
+	}
+
+	.cat-info {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		flex: 1;
+		min-width: 0;
+	}
+
+	.cat-color {
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		flex-shrink: 0;
+	}
+
+	.cat-info > div {
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+	}
+
+	.cat-name {
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: #1f2937;
+	}
+
+	.cat-percent {
+		font-size: 0.6875rem;
+		color: #9ca3af;
+	}
+
+	.cat-values {
+		text-align: right;
+	}
+
+	.cat-amount {
+		font-size: 0.875rem;
+		font-weight: 700;
+		color: #1f2937;
+		display: block;
+	}
+
+	.cat-diff {
+		font-size: 0.6875rem;
+	}
+
+	.cat-diff.over {
+		color: #dc2626;
+	}
+
+	.cat-diff.under {
+		color: #059669;
+	}
+
+	.cat-bar-track {
+		height: 6px;
+		background: #f3f4f6;
+		border-radius: 9999px;
+		overflow: hidden;
+		margin-top: 0.25rem;
+	}
+
+	.cat-bar-fill {
+		height: 100%;
+		border-radius: 9999px;
+		transition: width 0.3s ease;
+	}
+
+	/* Insights Card */
+	.insights-list {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.insight-item {
+		display: flex;
+		gap: 1rem;
+		padding: 1rem;
+		border-radius: 0.75rem;
+	}
+
+	.insight-item.danger {
+		background: #fef2f2;
+		border: 1px solid #fecaca;
+	}
+
+	.insight-item.warning {
+		background: #fef3c7;
+		border: 1px solid #fde68a;
+	}
+
+	.insight-item.success {
+		background: #f0fdf4;
+		border: 1px solid #bbf7d0;
+	}
+
+	.insight-item.info {
+		background: #f3f4f6;
+		border: 1px solid #d1d5db;
+	}
+
+	.insight-item.savings {
+		background: #f3f4f6;
+		border: 1px solid #d1d5db;
+	}
+
+	.insight-icon {
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+	}
+
+	.insight-item.danger .insight-icon {
+		background: #fee2e2;
+		color: #dc2626;
+	}
+
+	.insight-item.warning .insight-icon {
+		background: #fef3c7;
+		color: #d97706;
+	}
+
+	.insight-item.success .insight-icon {
+		background: #d1fae5;
+		color: #059669;
+	}
+
+	.insight-item.info .insight-icon {
+		background: #f3f4f6;
+		color: #1f2937;
+	}
+
+	.insight-item.savings .insight-icon {
+		background: #f3f4f6;
+		color: #1f2937;
+	}
+
+	.insight-icon :global(svg) {
+		width: 18px;
+		height: 18px;
+	}
+
+	.insight-content h4 {
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: #1f2937;
+		margin: 0;
+	}
+
+	.insight-item.danger .insight-content h4 {
+		color: #991b1b;
+	}
+
+	.insight-item.warning .insight-content h4 {
+		color: #92400e;
+	}
+
+	.insight-item.success .insight-content h4 {
+		color: #166534;
+	}
+
+	.insight-item.info .insight-content h4 {
+		color: #1f2937;
+	}
+
+	.insight-item.savings .insight-content h4 {
+		color: #1f2937;
+	}
+
+	.insight-content p {
+		font-size: 0.8125rem;
+		color: #374151;
+		margin: 0.25rem 0 0 0;
+		line-height: 1.5;
+	}
+
+	/* Responsive */
+	@media (max-width: 1200px) {
+		.stats-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 1024px) {
+		.charts-grid,
+		.bottom-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 768px) {
+		.analytics-page {
+			padding: 1rem;
+		}
+
+		.stats-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
