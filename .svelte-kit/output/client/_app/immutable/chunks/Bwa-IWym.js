@@ -1,0 +1,1 @@
+import{aB as a,F as e,a0 as c,aC as i}from"./DXx4DmIk.js";function _(n){n&&a(n[e]??"a component",n.name)}function d(){const n=c?.function;function o(t){i(t,n[e])}return{$destroy:()=>o("$destroy()"),$on:()=>o("$on(...)"),$set:()=>o("$set(...)")}}const s="5";typeof window<"u"&&((window.__svelte??={}).v??=new Set).add(s);export{_ as c,d as l};
